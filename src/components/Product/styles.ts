@@ -7,6 +7,9 @@ export const Card = styled.div`
   border-radius: 8px;
   padding: 8px;
   position: relative;
+  text-decoration: none;
+  color: ${cores.branca};
+  display: block;
 
   img {
     display: block;

@@ -17,7 +17,7 @@ export const formataPreco = (preco = 0) => {
 }
 
 const ProductsList = ({ background, title, games }: Props) => {
-  const getGameTags = (game: Game) => {
+  const getGameTags = (game: Game): string[] => {
     const tags = []
 
     if (game.release_date) {
@@ -32,7 +32,7 @@ const ProductsList = ({ background, title, games }: Props) => {
       tags.push(formataPreco(game.prices.current))
     }
 
-    return tags
+    return tags.map((tag) => tag.toString())
   }
 
   return (
@@ -43,7 +43,7 @@ const ProductsList = ({ background, title, games }: Props) => {
           {games.map((game) => (
             <li key={game.id}>
               <Product
-                id={game.id}
+                // id={game.id}
                 category={game.details.category}
                 description={game.description}
                 image={game.media.thumbnail}
