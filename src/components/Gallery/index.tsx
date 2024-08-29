@@ -1,54 +1,36 @@
 import { useState } from 'react'
 
 import Section from '../Section'
-import { GallerryItem } from '../../pages/Home'
-
-import { Action, Item, Items, Modal, ModalContent } from './styles'
-
-import miranha from '../../assets/images/banner-homem-aranha.png'
-import hogwards from '../../assets/images/fundo_hogwarts.png'
 
 import play from '../../assets/images/play.png'
 import zoom from '../../assets/images/zoom.png'
-import close from '../../assets/images/fechar.png'
+import closeIcon from '../../assets/images/fechar.png'
 
-const mock: GallerryItem[] = [
-  {
-    type: 'image',
-    url: miranha
-  },
-  {
-    type: 'image',
-    url: hogwards
-  },
-  {
-    type: 'video',
-    url: 'https://www.youtube.com/embed/NthGfn_ddRQ?si=ONPaipBJUxdBlfko'
-  }
-]
+import * as S from './styles'
 
 type Props = {
   defaultCover: string
   name: string
+  items: GalleryItemItem[]
 }
 
-interface ModalState extends GallerryItem {
+interface ModalState extends GalleryItemItem {
   isVisible: boolean
 }
 
-const Gallery = ({ defaultCover, name }: Props) => {
+const Gallery = ({ defaultCover, name, items }: Props) => {
   const [modal, setModal] = useState<ModalState>({
     isVisible: false,
     type: 'image',
     url: ''
   })
 
-  const getMediaCover = (item: GallerryItem) => {
+  const getMediaCover = (item: GalleryItemItem) => {
     if (item.type === 'image') return item.url
     return defaultCover
   }
 
-  const getMediaIcon = (item: GallerryItem) => {
+  const getMediaIcon = (item: GalleryItemItem) => {
     if (item.type === 'image') return zoom
     return play
   }
@@ -64,9 +46,9 @@ const Gallery = ({ defaultCover, name }: Props) => {
   return (
     <>
       <Section title="Galeria" background="black">
-        <Items>
-          {mock.map((media, index) => (
-            <Item
+        <S.Items>
+          {items.map((media, index) => (
+            <S.Item
               key={media.url}
               onClick={() => {
                 setModal({
@@ -80,41 +62,35 @@ const Gallery = ({ defaultCover, name }: Props) => {
                 src={getMediaCover(media)}
                 alt={`Mídia ${index + 1} de ${name}`}
               />
-              <Action>
+              <S.Action>
                 <img
                   src={getMediaIcon(media)}
                   alt="Clique aqui prar maximar a mídia"
                 />
-              </Action>
-            </Item>
+              </S.Action>
+            </S.Item>
           ))}
-        </Items>
+        </S.Items>
       </Section>
-      <Modal className={modal.isVisible ? 'visivel' : ''}>
-        <ModalContent className="conatiner">
+      <S.Modal className={modal.isVisible ? 'is-visible' : ''}>
+        <S.ModalContent className="conatiner">
           <header>
             <h4>{name}</h4>
-            <img
-              src={close}
-              alt="Ícone de fechar"
-              onClick={() => {
-                closeModal()
-              }}
-            />
+            <img src={closeIcon} alt="Ícone de fechar" onClick={closeModal} />
           </header>
           {modal.type === 'image' ? (
             <img src={modal.url} />
           ) : (
             <iframe frameBorder={0} src={modal.url} />
           )}
-        </ModalContent>
+        </S.ModalContent>
         <div
           className="overlay"
           onClick={() => {
             closeModal()
           }}
         ></div>
-      </Modal>
+      </S.Modal>
     </>
   )
 }

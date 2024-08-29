@@ -1,31 +1,53 @@
-import bannerImg from '../../assets/images/fundo_hogwarts.png'
 import Button from '../Button'
 import Tag from '../Tag'
-import { Banner, Infos } from './styles'
 
-const Hero = () => (
-  <Banner style={{ backgroundImage: `url(${bannerImg})` }}>
-    <div className="container">
-      <div>
-        <Tag>RPG</Tag>
-        <Tag>PS5</Tag>
+import { parseToBrl } from '../../utils'
+
+import * as S from './styles'
+import { useDispatch } from 'react-redux'
+import { add, open } from '../../store/reducers/cart'
+
+type Props = {
+  game: Game
+}
+
+const Hero = ({ game }: Props) => {
+  const dispach = useDispatch()
+
+  const addToCArt = () => {
+    dispach(add(game))
+    dispach(open())
+  }
+
+  return (
+    <S.Banner style={{ backgroundImage: `url(${game.media.cover})` }}>
+      <div className="container">
+        <div>
+          <Tag>{game.details.category}</Tag>
+          <Tag>{game.details.system}</Tag>
+        </div>
+        <S.Infos>
+          <h2>{game.name}</h2>
+          <p>
+            {game.prices.discount && (
+              <span>De {parseToBrl(game.prices.old)}</span>
+            )}
+            {game.prices.current && <>Por {parseToBrl(game.prices.current)}</>}
+          </p>
+          {game.prices.current && (
+            <Button
+              type="button"
+              title="Clique aqui para adicionar este jogo ao carrinho"
+              varient="primary"
+              onClick={addToCArt}
+            >
+              Adicionar ao carrinho
+            </Button>
+          )}
+        </S.Infos>
       </div>
-      <Infos>
-        <h2>Hogwarts Legacy</h2>
-        <p>
-          <span>De R$ 250,00</span>
-          Por R$ 190,00
-        </p>
-        <Button
-          type="button"
-          title="Clique aqui para adicionar este jogo ao carrinho"
-          varient="primary"
-        >
-          Adicionar ao carrinho
-        </Button>
-      </Infos>
-    </div>
-  </Banner>
-)
+    </S.Banner>
+  )
+}
 
 export default Hero
